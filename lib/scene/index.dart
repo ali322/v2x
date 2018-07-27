@@ -8,11 +8,11 @@ import "./more.dart";
 class IndexScene extends StatefulWidget{
   @override
     State<StatefulWidget> createState() {
-      return new _IndexSceneState();
+      return new _IndexState();
     }
 }
 
-class _IndexSceneState extends State<IndexScene>{
+class _IndexState extends State<IndexScene>{
   int _tabbarIndex = 0;
 
   List<Widget> _renderStacks() {

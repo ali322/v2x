@@ -1,6 +1,6 @@
 String fromNow(datetime) {
   final _now = new DateTime.now();
-  final _datetime = datetime is String ? DateTime.parse(datetime) : DateTime.fromMillisecondsSinceEpoch(datetime, isUtc: true);
+  final _datetime = datetime is String ? DateTime.parse(datetime) : DateTime.fromMillisecondsSinceEpoch(datetime * 1000);
   final _diff = _now.difference(_datetime);
   if (_diff.inMinutes <60) {
     return '${_diff.inMinutes}分钟之前';
