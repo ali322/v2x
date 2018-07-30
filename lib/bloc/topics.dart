@@ -14,19 +14,21 @@ class TopicsBloc{
 
   Future<Null> fetchTopics({type: 'latest'}) async{
     final _api = apis[type == 'hot' ? 'hot_topics' : 'latest_topics'];
-    final _controller = type == 'hot' ? _hot : _latest;
     try {
       final _topics = await http.get(_api).then(_mapResponse);
-      _controller.add(_topics);
+      type == 'hot' ? _hot.add(_topics) : _latest.add(_topics);
     } catch(err) {
-      _controller.addError(err);
+      type == 'hot' ? _hot.addError(err) : _latest.addError(err);
     }
   }
 
   List<Topic> _mapResponse(http.Response ret) {
-    final List<Topic> _topics = json.decode(ret.body).map<Topic>((v) {
-      return Topic.fromJson(v);
-    }).toList();
+    final List<Topic> _topics = json.decode(ret.body).map<Topic>((v) => Topic.fromJson(v)).toList();
     return _topics;
+  }
+
+  void dispose() {
+    _latest.close();
+    _hot.close();
   }
 }

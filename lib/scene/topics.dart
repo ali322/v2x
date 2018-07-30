@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
-import "dart:async";
 import "../bloc/topics.dart";
 import "../model/topic.dart";
-import "../widget/title.dart";
+import "../widget/tile.dart";
+import "./topic.dart";
 
 class TopicsScene extends StatefulWidget{
   @override
@@ -52,13 +52,20 @@ class _TopicsState extends State<TopicsScene> with TickerProviderStateMixin{
 
   Widget _renderRow(Topic topic) {
     return InkWell(
+      onTap: () {
+        Navigator.of(context).push(new MaterialPageRoute(
+          builder: (BuildContext context) {
+            return new TopicScene(id: topic.id,);
+          }
+        ));
+      },
       child: Column(
         children: <Widget>[
-          TopicTitle(
+          TopicTile(
             avatar: topic.authorAvatar,
             title: Text(topic.authorName, style: TextStyle(fontSize: 14.0)),
             subTitle: Text(topic.createdAt, style: TextStyle(fontSize: 12.0, color: Colors.grey)),
-            trailing: Text('${topic.replyCount}'),
+            trailing: Text(topic.replyCount > 0 ? '${topic.replyCount} 条回复' : '暂无回复'),
           ),
           Container(
             alignment: Alignment.centerLeft,
@@ -94,16 +101,13 @@ class _TopicsState extends State<TopicsScene> with TickerProviderStateMixin{
     Widget build(BuildContext context) {
       return Scaffold(
         appBar: AppBar(
-          brightness: Brightness.dark,
-          elevation: 0.0,
+          elevation: 0.5,
           titleSpacing: 0.0,
           bottom: null,
           title: Align(
             alignment: Alignment.bottomCenter,
             child: TabBar(
               controller: _tabController,
-              labelColor: Colors.white,
-              indicatorColor: Colors.white,
               tabs: <Widget>[
                 Tab(text:'最新'),
                 Tab(text:'热门'),

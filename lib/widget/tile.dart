@@ -1,13 +1,13 @@
 import "package:flutter/material.dart";
 import "package:cached_network_image/cached_network_image.dart";
 
-class TopicTitle extends StatelessWidget{
+class TopicTile extends StatelessWidget{
   String avatar;
   Widget title;
   Widget subTitle;
   Widget trailing;
 
-  TopicTitle({Key key,@required this.avatar, @required this.title, @required this.subTitle, @required this.trailing}):super(key: key);
+  TopicTile({Key key,@required this.avatar, @required this.title, @required this.subTitle,this.trailing}):super(key: key);
 
   @override
     Widget build(BuildContext context) {

@@ -32,7 +32,7 @@ class _IndexState extends State<IndexScene>{
           children: _renderStacks(),
         ),
         bottomNavigationBar: CupertinoTabBar(
-          activeColor: Theme.of(context).primaryColor,
+          // activeColor: Theme.of(context).primaryColor,
           currentIndex: _tabbarIndex,
           onTap: (int i) {
             setState(() {
@@ -53,8 +53,8 @@ class _IndexState extends State<IndexScene>{
               title: Text('收藏')
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.more),
-              title: Text('更多')
+              icon: Icon(Icons.person),
+              title: Text('我的')
             )
           ],
         ),

@@ -6,8 +6,10 @@ class App extends StatelessWidget{
     Widget build(BuildContext context) {
       return MaterialApp(
         theme: ThemeData(
-          primaryColor: Colors.lightBlueAccent,
+          scaffoldBackgroundColor: Colors.white,
+          primaryColor: Colors.white,
           bottomAppBarColor: Color(0xFFF7F7F7),
+          dividerColor: Color(0xFFDDDDDD),
           iconTheme: new IconThemeData(
             color: Color(0xFF666666)
           ),
