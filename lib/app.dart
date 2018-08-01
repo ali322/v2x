@@ -9,7 +9,9 @@ class App extends StatelessWidget{
           scaffoldBackgroundColor: Colors.white,
           primaryColor: Colors.white,
           bottomAppBarColor: Color(0xFFF7F7F7),
-          dividerColor: Color(0xFFDDDDDD),
+          dividerColor: Color(0xFFEEEEEE),
+          hintColor: Color(0xFFDDDDDD),
+          buttonColor: Color(0xFF4B6EFF),
           iconTheme: new IconThemeData(
             color: Color(0xFF666666)
           ),

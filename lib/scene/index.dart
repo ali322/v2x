@@ -3,7 +3,7 @@ import "package:flutter/cupertino.dart";
 import "./topics.dart";
 import "./explorer.dart";
 import "./favorite.dart";
-import "./more.dart";
+import "./me.dart";
 
 class IndexScene extends StatefulWidget{
   @override
@@ -20,7 +20,7 @@ class _IndexState extends State<IndexScene>{
       TopicsScene(),
       ExplorerScene(),
       FavoriteScene(),
-      MoreScene()
+      MeScene()
     ];
   }
 
