@@ -22,19 +22,41 @@ final _passwordTransformer = new StreamTransformer<String, String>.fromHandlers(
 );
 
 class LoginBloc{
-  BehaviorSubject<String> _usernameSubject = BehaviorSubject<String>();
+  final _usernameSubject = BehaviorSubject<String>();
   Stream<String> get username => _usernameSubject.stream.transform(_usernameTransformer).distinct();
 
-  BehaviorSubject<String> _passwordSubject = BehaviorSubject<String>();
+  final _passwordSubject = BehaviorSubject<String>();
   Stream<String> get password => _passwordSubject.stream.transform(_passwordTransformer).distinct();
 
   void Function(String) get changeUsername => _usernameSubject.sink.add;
   void Function(String) get changePassword => _passwordSubject.sink.add;
 
-  LoginBloc() {
+  final _loginController = StreamController<Null>();
 
+  Stream<Map<String, String>> validSubmit;
+
+  LoginBloc() {
+    validSubmit = Observable.combineLatest2(username, password, (_username, _password) {
+      return <String, String>{'username': _username, 'password': _password};
+    });
+
+    Observable(_loginController.stream).withLatestFrom(validSubmit, (_, v) => v)
+      .listen((data) {
+        print('===>$data');
+      }).onError((err) {
+        print('$err');
+      });
   }
 
+  void doLogin() {
+    if (_usernameSubject.value == null) {
+      _usernameSubject.add('');
+    }
+    if (_passwordSubject.value == null) {
+      _passwordSubject.add('');
+    }
+    _loginController.add(null);
+  }
 
   void dispose() {
     _usernameSubject.close();

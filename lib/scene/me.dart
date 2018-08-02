@@ -61,7 +61,7 @@ class MeScene extends StatelessWidget{
                 title: Row(
                   children: <Widget>[
                     Icon(Icons.description),
-                    Padding(child: Text('我的主题'), padding: const EdgeInsets.only(left: 12.0))
+                    Padding(child: Text('我的主题', style: TextStyle(fontSize: 16.0)), padding: const EdgeInsets.only(left: 12.0))
                   ],
                 ),
                 trailing: Icon(Icons.arrow_forward_ios, size: 14.0),
@@ -70,7 +70,7 @@ class MeScene extends StatelessWidget{
                 title: Row(
                   children: <Widget>[
                     Icon(Icons.comment),
-                    Padding(child: Text('我的回复'), padding: const EdgeInsets.only(left: 12.0))
+                    Padding(child: Text('我的回复', style: TextStyle(fontSize: 16.0)), padding: const EdgeInsets.only(left: 12.0))
                   ],
                 ),
                 trailing: Icon(Icons.arrow_forward_ios, size: 14.0),

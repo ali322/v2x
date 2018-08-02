@@ -71,7 +71,7 @@ class _LoginState extends State<LoginScene>{
                     color: Theme.of(context).buttonColor,
                     textColor: Colors.white,
                     onPressed: () {
-
+                      _bloc.doLogin();
                     },
                     child: Text('登陆'),
                   )
