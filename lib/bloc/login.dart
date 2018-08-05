@@ -1,5 +1,9 @@
 import "package:rxdart/rxdart.dart";
 import "dart:async";
+import "dart:convert";
+import "package:http/http.dart" as http;
+import "../config/api.dart";
+import "./global.dart";
 
 final _usernameTransformer = new StreamTransformer<String, String>.fromHandlers(
   handleData: (val, EventSink evt) {
@@ -31,31 +35,37 @@ class LoginBloc{
   void Function(String) get changeUsername => _usernameSubject.sink.add;
   void Function(String) get changePassword => _passwordSubject.sink.add;
 
-  final _loginController = StreamController<Null>();
-
-  Stream<Map<String, String>> validSubmit;
+  Stream<Map<String, String>> credential;
 
   LoginBloc() {
-    validSubmit = Observable.combineLatest2(username, password, (_username, _password) {
+    credential = Observable.combineLatest2(username, password, (_username, _password) {
       return <String, String>{'username': _username, 'password': _password};
     });
-
-    Observable(_loginController.stream).withLatestFrom(validSubmit, (_, v) => v)
-      .listen((data) {
-        print('===>$data');
-      }).onError((err) {
-        print('$err');
-      });
   }
 
-  void doLogin() {
-    if (_usernameSubject.value == null) {
-      _usernameSubject.add('');
+  void validSubmit (){
+      if (_usernameSubject.value == null) {
+        _usernameSubject.add('');
+      }
+      if (_passwordSubject.value == null) {
+        _passwordSubject.add('');
+      }
+  }
+
+  Future<Null> doLogin(Map<String, String> _credential,GlobalBloc _globBloc) async{
+    try {
+      final _ret = await http.post(apis['signin'], body: _credential).then((ret) => json.decode(ret.body));
+      if (_ret["success"] == true) {
+        _globBloc.signin({
+          'username': _ret['data']['username']
+        });
+        return Future.value(null);
+      } else {
+        return Future.error(_ret['message']);
+      }
+    } catch(_) {
+      return Future.error("登陆失败");
     }
-    if (_passwordSubject.value == null) {
-      _passwordSubject.add('');
-    }
-    _loginController.add(null);
   }
 
   void dispose() {

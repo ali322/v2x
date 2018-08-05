@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "../bloc/login.dart";
+import "../bloc/provider.dart";
 
 class LoginScene extends StatefulWidget{
   @override
@@ -12,7 +13,20 @@ class _LoginState extends State<LoginScene>{
   final _bloc = new LoginBloc();
 
   @override
+    void initState() {
+      super.initState();
+      // final _globalBloc = Provider.of(context);
+      // _bloc.authenticated.listen((bool isAuthenticated) {
+      //   if (isAuthenticated) {
+      //     Navigator.of(context).pop();
+      //     // _globalBloc.signin({});
+      //   }
+      // });
+    }
+
+  @override
     Widget build(BuildContext context) {
+      final _globalBloc = Provider.of(context);
       return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
@@ -65,15 +79,29 @@ class _LoginState extends State<LoginScene>{
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 20.0),
-                  child: MaterialButton(
-                    minWidth: MediaQuery.of(context).size.width,
-                    elevation: 1.0,
-                    color: Theme.of(context).buttonColor,
-                    textColor: Colors.white,
-                    onPressed: () {
-                      _bloc.doLogin();
+                  child: StreamBuilder(
+                    stream: _bloc.credential,
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      return MaterialButton(
+                        minWidth: MediaQuery.of(context).size.width,
+                        elevation: 1.0,
+                        color: Theme.of(context).buttonColor,
+                        textColor: Colors.white,
+                        onPressed: () {
+                          _bloc.validSubmit();
+                          if (snapshot.hasData) {
+                            _bloc.doLogin(snapshot.data, _globalBloc).then((_) {
+                              Navigator.of(context).pop();
+                            }).catchError((err) {
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text(err),
+                              ));
+                            });
+                          }
+                        },
+                        child: Text('登陆'),
+                      );
                     },
-                    child: Text('登陆'),
                   )
                 )
               ],
