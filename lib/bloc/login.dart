@@ -3,7 +3,6 @@ import "dart:async";
 import "dart:convert";
 import "package:http/http.dart" as http;
 import "../config/api.dart";
-import "./global.dart";
 
 final _usernameTransformer = new StreamTransformer<String, String>.fromHandlers(
   handleData: (val, EventSink evt) {
@@ -52,14 +51,11 @@ class LoginBloc{
       }
   }
 
-  Future<Null> doLogin(Map<String, String> _credential,GlobalBloc _globBloc) async{
+  Future<String> doLogin(Map<String, String> _credential) async{
     try {
       final _ret = await http.post(apis['signin'], body: _credential).then((ret) => json.decode(ret.body));
       if (_ret["success"] == true) {
-        _globBloc.signin({
-          'username': _ret['data']['username']
-        });
-        return Future.value(null);
+        return Future.value(_ret['data']['username']);
       } else {
         return Future.error(_ret['message']);
       }

@@ -6,5 +6,6 @@ const Map<String, String> apis = {
   'topic': '$apiHost/topics/show.json',
   "replies": '$apiHost/replies/show.json',
   'nodes': '$apiHost/nodes/all.json',
-  'signin': 'https://v2x-api.now.sh/signin'
+  'signin': 'https://v2x-api.now.sh/signin',
+  'member': '$apiHost/members/show.json'
 };

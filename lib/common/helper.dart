@@ -10,3 +10,7 @@ String fromNow(datetime) {
     return '${_datetime.year}年${_datetime.month}月${_datetime.day}日 ${_datetime.hour}:${_datetime.minute}:${_datetime.second}';
   }
 }
+
+String formatUrl(String url) {
+  return url.startsWith('//') ? 'https:$url' : url;
+}

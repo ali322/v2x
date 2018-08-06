@@ -13,20 +13,8 @@ class _LoginState extends State<LoginScene>{
   final _bloc = new LoginBloc();
 
   @override
-    void initState() {
-      super.initState();
-      // final _globalBloc = Provider.of(context);
-      // _bloc.authenticated.listen((bool isAuthenticated) {
-      //   if (isAuthenticated) {
-      //     Navigator.of(context).pop();
-      //     // _globalBloc.signin({});
-      //   }
-      // });
-    }
-
-  @override
     Widget build(BuildContext context) {
-      final _globalBloc = Provider.of(context);
+      final _signin = Provider.of(context).signin;
       return Scaffold(
         appBar: AppBar(
           elevation: 0.0,
@@ -55,7 +43,6 @@ class _LoginState extends State<LoginScene>{
                     return TextField(
                       onChanged: _bloc.changeUsername,
                       decoration: InputDecoration(
-                        // border: InputBorder.none,
                         hintText: '请输入用户名',
                         hintStyle: TextStyle(fontSize: 14.0),
                         errorText: snapshot.error 
@@ -69,7 +56,6 @@ class _LoginState extends State<LoginScene>{
                     return TextField(
                       onChanged: _bloc.changePassword,
                       decoration: InputDecoration(
-                        // border: InputBorder.none,
                         hintText: '请输入密码',
                         hintStyle: TextStyle(fontSize: 14.0),
                         errorText: snapshot.error
@@ -90,11 +76,13 @@ class _LoginState extends State<LoginScene>{
                         onPressed: () {
                           _bloc.validSubmit();
                           if (snapshot.hasData) {
-                            _bloc.doLogin(snapshot.data, _globalBloc).then((_) {
+                            _bloc.doLogin(snapshot.data).then((String token) {
+                              _signin(token);
                               Navigator.of(context).pop();
                             }).catchError((err) {
+                              print(err);
                               Scaffold.of(context).showSnackBar(SnackBar(
-                                content: Text(err),
+                                content: Text(err.toString()),
                               ));
                             });
                           }

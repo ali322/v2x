@@ -1,9 +1,11 @@
 import "package:flutter/material.dart";
 import "./login.dart";
+import "../bloc/provider.dart";
 
 class MeScene extends StatelessWidget{
   @override
     Widget build(BuildContext context) {
+      final _auth = Provider.of(context).auth;
       return Scaffold(
         backgroundColor: Theme.of(context).dividerColor,
         appBar: AppBar(
@@ -12,14 +14,19 @@ class MeScene extends StatelessWidget{
         ),
         body: Column(
           children: <Widget>[
-            _renderInfo(context),
+            StreamBuilder(
+              stream: _auth,
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                return snapshot.hasData ? _renderInfo(context, snapshot.data) : _renderAnonymous(context);
+              },
+            ),
             _renderMenus(context)
           ]
         )
       );
     }
 
-    Widget _renderInfo(BuildContext context) {
+    Widget _renderAnonymous(BuildContext context) {
       return GestureDetector(
         onTap: () {
           Navigator.of(context).push(new MaterialPageRoute(
@@ -45,6 +52,27 @@ class MeScene extends StatelessWidget{
             ],
           ),
         )
+      );
+    }
+
+    Widget _renderInfo(BuildContext context, Map<String, String> auth) {
+      return Container(
+        padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 10.0),
+        color: Colors.white,
+        child: Row(
+          children: <Widget>[
+            CircleAvatar(
+              radius: 35.0,
+              backgroundImage: NetworkImage(auth['avatar']),
+            ),
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.only(left: 20.0),
+                child: Text('欢迎你, ${auth["username"]}')
+              ),
+            )
+          ],
+        ),
       );
     }
 
