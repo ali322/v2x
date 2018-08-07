@@ -11,6 +11,7 @@ class LoginScene extends StatefulWidget{
 
 class _LoginState extends State<LoginScene>{
   final _bloc = new LoginBloc();
+  bool _isSubmiting = false;
 
   @override
     Widget build(BuildContext context) {
@@ -55,6 +56,7 @@ class _LoginState extends State<LoginScene>{
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     return TextField(
                       onChanged: _bloc.changePassword,
+                      obscureText: true,
                       decoration: InputDecoration(
                         hintText: '请输入密码',
                         hintStyle: TextStyle(fontSize: 14.0),
@@ -73,9 +75,12 @@ class _LoginState extends State<LoginScene>{
                         elevation: 1.0,
                         color: Theme.of(context).buttonColor,
                         textColor: Colors.white,
-                        onPressed: () {
+                        onPressed: _isSubmiting ? null : () {
                           _bloc.validSubmit();
                           if (snapshot.hasData) {
+                            setState(() {
+                              _isSubmiting = true;
+                            });
                             _bloc.doLogin(snapshot.data).then((String token) {
                               _signin(token);
                               Navigator.of(context).pop();
@@ -84,6 +89,10 @@ class _LoginState extends State<LoginScene>{
                               Scaffold.of(context).showSnackBar(SnackBar(
                                 content: Text(err.toString()),
                               ));
+                            }).whenComplete(() {
+                              setState(() {
+                                _isSubmiting = false;
+                              });
                             });
                           }
                         },

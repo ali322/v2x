@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "./scene/me.dart";
+import "./scene/index.dart";
 import "./bloc/provider.dart";
 
 class App extends StatelessWidget{
@@ -22,7 +22,7 @@ class App extends StatelessWidget{
             )
           ),
           debugShowCheckedModeBanner: false,
-          home: MeScene()
+          home: IndexScene()
         )
       );
     }

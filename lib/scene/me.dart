@@ -1,27 +1,44 @@
 import "package:flutter/material.dart";
 import "./login.dart";
 import "../bloc/provider.dart";
+import "../bloc/me.dart";
 
 class MeScene extends StatelessWidget{
+  final _bloc = new MeBloc();
+
   @override
     Widget build(BuildContext context) {
-      final _auth = Provider.of(context).auth;
+      final _token = Provider.of(context).token;
       return Scaffold(
         backgroundColor: Theme.of(context).dividerColor,
         appBar: AppBar(
           elevation: 0.5,
           title: Text('我的', style: TextStyle(fontSize: 16.0))
         ),
-        body: Column(
-          children: <Widget>[
-            StreamBuilder(
-              stream: _auth,
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                return snapshot.hasData ? _renderInfo(context, snapshot.data) : _renderAnonymous(context);
-              },
-            ),
-            _renderMenus(context)
-          ]
+        body: StreamBuilder(
+          stream: _token,
+          builder: (BuildContext context, AsyncSnapshot token) {
+            if (token.hasData) {
+              return StreamBuilder(
+                stream: _bloc.me,
+                builder: (BuildContext context, AsyncSnapshot me) {
+                  if (me.hasData == false) {
+                    _bloc.fetchMe(token.data);
+                    return Center(child: CircularProgressIndicator(strokeWidth: 2.0));
+                  }
+                  return Column(children: <Widget>[
+                    _renderInfo(context, me.data),
+                    _renderMenus(context),
+                    _renderSignout(context)
+                  ]);
+                },
+              );
+            }
+            return Column(children: <Widget>[
+              _renderAnonymous(context),
+              _renderMenus(context)
+            ]);
+          },
         )
       );
     }
@@ -107,5 +124,24 @@ class MeScene extends StatelessWidget{
           ).toList(),
         )
       );
+    }
+
+    Widget _renderSignout(BuildContext context) {
+      final _signout = Provider.of(context).signout;
+      return Row(children: <Widget>[
+        Expanded(
+          child: GestureDetector(
+            onTap: _signout,
+            child: Container(
+              height: 40.0,
+              margin: const EdgeInsets.only(top: 20.0),
+              color: Colors.white,
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
+              child: Text('退出登陆', style: TextStyle(fontSize: 16.0))
+            )
+          )
+        )
+      ]);
     }
 }
