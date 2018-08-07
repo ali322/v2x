@@ -18,7 +18,7 @@ class TopicsBloc{
       final _topics = await http.get(_api).then(_mapResponse);
       type == 'hot' ? _hot.add(_topics) : _latest.add(_topics);
     } catch(err) {
-      type == 'hot' ? _hot.addError(err) : _latest.addError(err);
+      // type == 'hot' ? _hot.addError(err) : _latest.addError(err);
     }
   }
 
