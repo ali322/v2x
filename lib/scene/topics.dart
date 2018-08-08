@@ -17,7 +17,7 @@ class _TopicsState extends State<TopicsScene> with TickerProviderStateMixin{
   VoidCallback _onChange;
   List<Topic> _latest;
   List<Topic> _hot;
-
+  
   @override
   void initState() {
     super.initState();
@@ -50,53 +50,6 @@ class _TopicsState extends State<TopicsScene> with TickerProviderStateMixin{
     _tabController.dispose();
   }
 
-  Widget _renderRow(Topic topic) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).push(new MaterialPageRoute(
-          builder: (BuildContext context) {
-            return new TopicScene(id: topic.id,);
-          }
-        ));
-      },
-      child: Column(
-        children: <Widget>[
-          TopicTile(
-            avatar: topic.authorAvatar,
-            title: Text(topic.authorName, style: TextStyle(fontSize: 14.0)),
-            subTitle: Text(topic.createdAt, style: TextStyle(fontSize: 12.0, color: Colors.grey)),
-            trailing: Text(topic.replyCount > 0 ? '${topic.replyCount} 条回复' : '暂无回复'),
-          ),
-          Container(
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.all(10.0),
-            child: Text(topic.title),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _renderTopics({type: 'latest'}) {
-    final List<Topic> _list = type == 'hot' ? _hot : _latest;
-    if (_list == null) {
-      return Center(
-        child: CircularProgressIndicator(strokeWidth: 2.0),
-      );
-    }
-    return Container(
-      child: RefreshIndicator(
-        onRefresh: () async{
-          return type == 'latest' ? _bloc.fetchLatest() : _bloc.fetchHot();
-        },
-        child: ListView.builder(
-          itemCount: _list.length,
-          itemBuilder: (BuildContext context, int i) => _renderRow(_list[i]),
-        ),
-      )
-    );
-  }
-
   @override
     Widget build(BuildContext context) {
       return Scaffold(
@@ -118,10 +71,76 @@ class _TopicsState extends State<TopicsScene> with TickerProviderStateMixin{
         body: TabBarView(
           controller: _tabController,
           children: <Widget>[
-            _renderTopics(),
-            _renderTopics(type: 'hot')
+            _TopicsList(list: _latest, onRefresh: _bloc.fetchLatest),
+            _TopicsList(list: _hot, onRefresh: _bloc.fetchHot),
           ],
         )
+      );
+    }
+}
+
+class _TopicsList extends StatefulWidget{
+  final List<Topic> list;
+  final VoidCallback onRefresh;
+
+  _TopicsList({Key key, @required this.list, @required this.onRefresh}):super(key: key);
+
+  @override
+    State<StatefulWidget> createState() {
+      return new _TopicsListState();
+    }
+}
+
+class _TopicsListState extends State<_TopicsList> with AutomaticKeepAliveClientMixin{
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+    Widget build(BuildContext context) {
+      final _list = widget.list;
+      final _onRefresh = widget.onRefresh;
+      if (_list == null) {
+        return Center(
+          child: CircularProgressIndicator(strokeWidth: 2.0),
+        );
+      }
+      return Container(
+        child: RefreshIndicator(
+          onRefresh: () async{
+            _onRefresh();
+          },
+          child: ListView.builder(
+            itemCount: _list.length,
+            itemBuilder: (BuildContext context, int i) => _renderRow(_list[i]),
+          ),
+        )
+      );
+    }
+
+    Widget _renderRow(Topic topic) {
+      return InkWell(
+        onTap: () {
+          Navigator.of(context).push(new MaterialPageRoute(
+            builder: (BuildContext context) {
+              return new TopicScene(id: topic.id,);
+            }
+          ));
+        },
+        child: Column(
+          children: <Widget>[
+            TopicTile(
+              avatar: topic.authorAvatar,
+              title: Text(topic.authorName, style: TextStyle(fontSize: 14.0)),
+              subTitle: Text(topic.createdAt, style: TextStyle(fontSize: 12.0, color: Colors.grey)),
+              trailing: Text(topic.replyCount > 0 ? '${topic.replyCount} 条回复' : '暂无回复'),
+            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: const EdgeInsets.all(10.0),
+              child: Text(topic.title),
+            )
+          ],
+        ),
       );
     }
 }

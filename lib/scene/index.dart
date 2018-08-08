@@ -4,6 +4,7 @@ import "./topics.dart";
 import "./explorer.dart";
 import "./favorite.dart";
 import "./me.dart";
+import "../widget/persist_tabview.dart";
 
 class IndexScene extends StatefulWidget{
   @override
@@ -17,10 +18,10 @@ class _IndexState extends State<IndexScene>{
 
   List<Widget> _renderStacks() {
     return <Widget>[
-      TopicsScene(),
-      ExplorerScene(),
-      FavoriteScene(),
-      MeScene()
+      PersistTabview(child: TopicsScene()),
+      PersistTabview(child: ExplorerScene()),
+      PersistTabview(child: FavoriteScene()),
+      PersistTabview(child: MeScene()),
     ];
   }
 
