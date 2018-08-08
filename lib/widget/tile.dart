@@ -2,10 +2,10 @@ import "package:flutter/material.dart";
 import "package:cached_network_image/cached_network_image.dart";
 
 class TopicTile extends StatelessWidget{
-  String avatar;
-  Widget title;
-  Widget subTitle;
-  Widget trailing;
+  final String avatar;
+  final Widget title;
+  final Widget subTitle;
+  final Widget trailing;
 
   TopicTile({Key key,@required this.avatar, @required this.title, @required this.subTitle,this.trailing}):super(key: key);
 

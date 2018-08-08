@@ -24,12 +24,12 @@ class _TopicsState extends State<TopicsScene> with TickerProviderStateMixin{
     _tabController = new TabController(vsync:  this, length: 2);
     _onChange = () {
       if (_tabController.index == 1 && _hot == null) {
-        _bloc.fetchTopics(type: 'hot');
+        _bloc.fetchHot();
       }
     };
     _tabController.addListener(_onChange);
 
-    _bloc.fetchTopics();
+    _bloc.fetchLatest();
     _bloc.latest.listen((data) {
       setState(() {
         _latest = data;
@@ -86,8 +86,8 @@ class _TopicsState extends State<TopicsScene> with TickerProviderStateMixin{
     }
     return Container(
       child: RefreshIndicator(
-        onRefresh: () {
-          return _bloc.fetchTopics(type: type);
+        onRefresh: () async{
+          return type == 'latest' ? _bloc.fetchLatest() : _bloc.fetchHot();
         },
         child: ListView.builder(
           itemCount: _list.length,

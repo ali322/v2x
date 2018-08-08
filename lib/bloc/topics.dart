@@ -5,30 +5,46 @@ import "package:http/http.dart" as http;
 import "../config/api.dart";
 import "../model/topic.dart";
 
+class FetchLatest{}
+
+class FetchHot{}
+
 class TopicsBloc{
-  BehaviorSubject<List<Topic>> _latest = BehaviorSubject<List<Topic>>();
-  Stream<List<Topic>> get latest => _latest.stream;
+  Stream<List<Topic>> _latest = Stream.empty();
+  Stream<List<Topic>> get latest => _latest;
 
-  BehaviorSubject<List<Topic>> _hot = BehaviorSubject<List<Topic>>();
-  Stream<List<Topic>> get hot => _hot.stream;
+  Stream<List<Topic>> _hot = Stream.empty();
+  Stream<List<Topic>> get hot => _hot;
 
-  Future<Null> fetchTopics({type: 'latest'}) async{
-    final _api = apis[type == 'hot' ? 'hot_topics' : 'latest_topics'];
-    try {
-      final _topics = await http.get(_api).then(_mapResponse);
-      type == 'hot' ? _hot.add(_topics) : _latest.add(_topics);
-    } catch(err) {
-      // type == 'hot' ? _hot.addError(err) : _latest.addError(err);
-    }
+  final _actionSubject = ReplaySubject<dynamic>();
+
+  void fetchLatest() {
+    _actionSubject.sink.add(FetchLatest());
+  }
+
+  void fetchHot() {
+    _actionSubject.sink.add(FetchHot());
+  }
+
+  TopicsBloc() {
+    _latest = Observable(_actionSubject.stream).ofType(TypeToken<FetchLatest>())
+      .asyncMap((_) => http.get(apis['latest_topics']).then(_mapResponse))
+      .asBroadcastStream();
+
+    _hot = Observable(_actionSubject.stream).ofType(TypeToken<FetchHot>())
+      .asyncMap((_) => http.get(apis['hot_topics']).then(_mapResponse))
+      .asBroadcastStream();
   }
 
   List<Topic> _mapResponse(http.Response ret) {
+    if (ret.body.isEmpty) {
+      return [];
+    }
     final List<Topic> _topics = json.decode(ret.body).map<Topic>((v) => Topic.fromJson(v)).toList();
     return _topics;
   }
 
   void dispose() {
-    _latest.close();
-    _hot.close();
+    _actionSubject.close();
   }
 }

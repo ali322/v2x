@@ -1,6 +1,5 @@
 import "package:http/http.dart" as http$;
 import "dart:async";
-import "dart:convert";
 
 class HttpClient extends http$.BaseClient{
   final http$.Client _client;
