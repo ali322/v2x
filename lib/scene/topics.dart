@@ -71,8 +71,8 @@ class _TopicsState extends State<TopicsScene> with TickerProviderStateMixin{
         body: TabBarView(
           controller: _tabController,
           children: <Widget>[
-            _TopicsList(list: _latest, onRefresh: _bloc.fetchLatest),
-            _TopicsList(list: _hot, onRefresh: _bloc.fetchHot),
+            _TopicsList(type: 'latest', list: _latest, onRefresh: _bloc.fetchLatest),
+            _TopicsList(type: 'hot', list: _hot, onRefresh: _bloc.fetchHot),
           ],
         )
       );
@@ -80,10 +80,11 @@ class _TopicsState extends State<TopicsScene> with TickerProviderStateMixin{
 }
 
 class _TopicsList extends StatefulWidget{
+  final String type;
   final List<Topic> list;
   final VoidCallback onRefresh;
 
-  _TopicsList({Key key, @required this.list, @required this.onRefresh}):super(key: key);
+  _TopicsList({Key key, @required this.type, @required this.list, @required this.onRefresh}):super(key: key);
 
   @override
     State<StatefulWidget> createState() {
@@ -110,6 +111,7 @@ class _TopicsListState extends State<_TopicsList> with AutomaticKeepAliveClientM
             _onRefresh();
           },
           child: ListView.builder(
+            key: ValueKey<String>(widget.type),
             itemCount: _list.length,
             itemBuilder: (BuildContext context, int i) => _renderRow(_list[i]),
           ),
