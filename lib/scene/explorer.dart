@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "../model/node.dart";
 import "../bloc/node.dart";
+import "./result.dart";
 
 class ExplorerScene extends StatefulWidget{
   @override
@@ -69,13 +70,22 @@ class _ExplorerState extends State<ExplorerScene>{
     Widget _renderNode(BuildContext context, Node node) {
       return Container(
         alignment: Alignment.center,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).dividerColor,
-            borderRadius: BorderRadius.circular(3.0)
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 3.0),
-          child: Text(node.name),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(new MaterialPageRoute(
+              builder: (BuildContext context) {
+                return new ResultScene(query: node.name);
+              }
+            ));
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).dividerColor,
+              borderRadius: BorderRadius.circular(3.0)
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 3.0),
+            child: Text(node.name),
+          )
         )
       );
     }
