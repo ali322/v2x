@@ -4,7 +4,6 @@ import "./topics.dart";
 import "./explorer.dart";
 import "./favorite.dart";
 import "./me.dart";
-import "../widget/persist_tabview.dart";
 
 class IndexScene extends StatefulWidget{
   @override
@@ -14,31 +13,34 @@ class IndexScene extends StatefulWidget{
 }
 
 class _IndexState extends State<IndexScene>{
-  int _tabbarIndex = 0;
-
-  List<Widget> _renderStacks() {
-    return <Widget>[
-      PersistTabview(child: TopicsScene()),
-      PersistTabview(child: ExplorerScene()),
-      PersistTabview(child: FavoriteScene()),
-      PersistTabview(child: MeScene()),
-    ];
-  }
+  final _pageController = new PageController(initialPage: 0);
+  int _pageIndex = 0;
+  final _pages = <Widget>[
+    TopicsScene(),
+    ExplorerScene(),
+    FavoriteScene(),
+    MeScene()
+  ];
 
   @override
     Widget build(BuildContext context) {
       return Scaffold(
-        body: IndexedStack(
-          index: _tabbarIndex,
-          children: _renderStacks(),
+        body: PageView(
+          controller: _pageController,
+          onPageChanged: (int i) {
+            if (i != _pageIndex) {
+              setState(() {
+                _pageIndex = i;
+              });
+            }
+          },
+          children: _pages,
         ),
         bottomNavigationBar: CupertinoTabBar(
           // activeColor: Theme.of(context).primaryColor,
-          currentIndex: _tabbarIndex,
+          currentIndex: _pageIndex,
           onTap: (int i) {
-            setState(() {
-              _tabbarIndex = i;
-            });
+            _pageController.jumpToPage(_pageIndex);
           },
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
