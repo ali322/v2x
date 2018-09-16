@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter/cupertino.dart";
+import "../widget/persist_tabview.dart";
 import "./topics.dart";
 import "./explorer.dart";
 import "./favorite.dart";
@@ -16,10 +17,10 @@ class _IndexState extends State<IndexScene>{
   final _pageController = new PageController(initialPage: 0);
   int _pageIndex = 0;
   final _pages = <Widget>[
-    TopicsScene(),
-    ExplorerScene(),
-    FavoriteScene(),
-    MeScene()
+    PersistTabview(child: TopicsScene()),
+    PersistTabview(child: ExplorerScene()),
+    PersistTabview(child: FavoriteScene()),
+    PersistTabview(child: MeScene()),
   ];
 
   @override
