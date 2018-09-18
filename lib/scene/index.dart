@@ -38,7 +38,6 @@ class _IndexState extends State<IndexScene>{
           children: _pages,
         ),
         bottomNavigationBar: CupertinoTabBar(
-          // activeColor: Theme.of(context).primaryColor,
           currentIndex: _pageIndex,
           onTap: (int i) {
             _pageController.jumpToPage(_pageIndex);
