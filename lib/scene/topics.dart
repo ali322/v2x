@@ -48,6 +48,7 @@ class _TopicsState extends State<TopicsScene> with TickerProviderStateMixin{
     super.dispose();
     _tabController.removeListener(_onChange);
     _tabController.dispose();
+    _bloc.dispose();
   }
 
   @override
