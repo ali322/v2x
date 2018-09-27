@@ -2,9 +2,21 @@ import "package:flutter/material.dart";
 import "../bloc/favorite.dart";
 import "../model/topic.dart";
 import "../widget/tile.dart";
+import "../widget/scene.dart";
 
-class FavoriteScene extends StatelessWidget{
+class FavoriteScene extends StatelessWidget implements Scene{
+  final ValueNotifier<bool> _initialized = ValueNotifier(false);
+
+  bool get initialized => _initialized.value;
+  set initialized(_) => _initialized.value = true;
+
   final _bloc = new FavoriteBloc();
+
+  FavoriteScene({Key key}):super(key: key){
+    _initialized.addListener(() {
+      _bloc.fetchFavorites();
+    });
+  }
 
   @override
     Widget build(BuildContext context) {
@@ -21,7 +33,6 @@ class FavoriteScene extends StatelessWidget{
               if (snapshot.hasData) {
                 return _renderTopics(snapshot.data);
               }
-              _bloc.fetchFavorites();
               return Center(child: CircularProgressIndicator(strokeWidth: 2.0));
             },
           ),

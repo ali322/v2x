@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:flutter/cupertino.dart";
 import "../widget/persist_tabview.dart";
+import "../widget/scene.dart";
 import "./topics.dart";
 import "./explorer.dart";
 import "./favorite.dart";
@@ -39,6 +40,12 @@ class _IndexState extends State<IndexScene>{
             setState(() {
               _pageIndex = i;
             });
+            if (_pages[i] is Scene) {
+              final _scene = _pages[i] as Scene;
+              if (_scene.initialized == false) {
+                _scene.initialized = true;
+              }
+            }
           },
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
