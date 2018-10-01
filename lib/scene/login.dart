@@ -14,6 +14,12 @@ class _LoginState extends State<LoginScene>{
   bool _isSubmiting = false;
 
   @override
+    void dispose() {
+      super.dispose();
+      _bloc.dispose();
+    }
+
+  @override
     Widget build(BuildContext context) {
       final _signin = Provider.of(context).signin;
       return Scaffold(
