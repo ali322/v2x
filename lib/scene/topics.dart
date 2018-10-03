@@ -57,7 +57,6 @@ class _TopicsState extends State<TopicsScene> with TickerProviderStateMixin{
         appBar: AppBar(
           elevation: 0.5,
           titleSpacing: 0.0,
-          bottom: null,
           title: Align(
             alignment: Alignment.bottomCenter,
             child: TabBar(
