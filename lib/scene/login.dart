@@ -26,7 +26,7 @@ class _LoginState extends State<LoginScene>{
         appBar: AppBar(
           elevation: 0.0,
           leading: IconButton(icon: const Icon(Icons.close), iconSize: 18.0, onPressed: () {
-            Navigator.of(context).maybePop();
+            Navigator.of(context).pop();
           }),
         ),
         body: Container(
