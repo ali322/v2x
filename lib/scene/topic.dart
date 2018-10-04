@@ -48,7 +48,7 @@ class _TopicState extends State<TopicScene>{
           elevation: 0.5,
           title: _renderBanner(),
           leading: IconButton(icon: const Icon(Icons.arrow_back_ios), iconSize: 18.0, onPressed: () {
-            Navigator.of(context).maybePop();
+            Navigator.of(context).pop();
           },)
         ),
         body: SafeArea(
