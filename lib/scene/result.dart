@@ -18,7 +18,7 @@ class ResultScene extends StatelessWidget{
           title: Text(query, style: TextStyle(fontSize: 14.0)),
           elevation: 0.5,
           leading: IconButton(icon: Icon(Icons.arrow_back_ios), iconSize: 18.0, onPressed: (){
-            Navigator.maybePop(context);
+            Navigator.of(context).pop();
           }),
         ),
         body: StreamBuilder(
