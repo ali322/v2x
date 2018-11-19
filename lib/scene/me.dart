@@ -3,12 +3,25 @@ import "./login.dart";
 import "../bloc/provider.dart";
 import "../bloc/me.dart";
 
-class MeScene extends StatelessWidget{
+class MeScene extends StatefulWidget{
+  @override
+    State<StatefulWidget> createState() {
+      return new _MeState();
+    }
+}
+
+class _MeState extends State<MeScene>{
   final _bloc = new MeBloc();
+  Stream<String> _token;
+
+  @override
+    void didChangeDependencies() {
+      super.didChangeDependencies();
+      _token = Provider.of(context).token;
+    }
 
   @override
     Widget build(BuildContext context) {
-      final _token = Provider.of(context).token;
       return Scaffold(
         backgroundColor: Theme.of(context).dividerColor,
         appBar: AppBar(
