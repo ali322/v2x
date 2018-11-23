@@ -130,16 +130,22 @@ class _TopicsListState extends State<_TopicsList> with AutomaticKeepAliveClientM
         },
         child: Column(
           children: <Widget>[
-            TopicTile(
-              avatar: topic.authorAvatar,
-              title: Text(topic.authorName, style: TextStyle(fontSize: 14.0)),
-              subTitle: Text(topic.createdAt, style: TextStyle(fontSize: 12.0, color: Colors.grey)),
-              trailing: Text(topic.replyCount > 0 ? '${topic.replyCount} 条回复' : '暂无回复'),
+            Padding(
+              padding: const EdgeInsets.only(top: 12.0),
+              child: TopicTile(
+                avatar: topic.authorAvatar,
+                title: Text(topic.authorName, style: TextStyle(fontSize: 14.0)),
+                subTitle: Text(topic.createdAt, style: TextStyle(fontSize: 12.0, color: Colors.grey)),
+                trailing: Text(topic.replyCount > 0 ? '${topic.replyCount} 条回复' : '暂无回复'),
+              ),
             ),
             Container(
               alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(6.0),
               child: Text(topic.title),
+              decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(color: Colors.black12))
+              ),
             )
           ],
         ),

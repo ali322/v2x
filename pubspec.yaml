@@ -5,7 +5,7 @@ dependencies:
   http: ^0.11.3+16
   rxdart: ^0.18.1
   cached_network_image: ^0.4.1+1
-  flutter_markdown: "^0.1.5"
+  flutter_markdown: "^0.2.0"
   flutter:
     sdk: flutter
 
