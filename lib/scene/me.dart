@@ -12,12 +12,13 @@ class MeScene extends StatefulWidget{
 
 class _MeState extends State<MeScene>{
   final _bloc = new MeBloc();
-  Stream<String> _token;
+  String _token;
 
   @override
     void didChangeDependencies() {
       super.didChangeDependencies();
-      _token = Provider.of(context).token;
+      final _auth = Provider.of(context).auth;
+      _token = _auth["token"];
     }
 
   @override
@@ -28,28 +29,22 @@ class _MeState extends State<MeScene>{
           elevation: 0.5,
           title: Text('我的', style: TextStyle(fontSize: 16.0))
         ),
-        body: StreamBuilder(
-          stream: _token,
-          builder: (BuildContext context, AsyncSnapshot token) {
-            if (token.hasData) {
-              return StreamBuilder(
-                stream: _bloc.me,
-                builder: (BuildContext context, AsyncSnapshot me) {
-                  if (me.hasData == false) {
-                    _bloc.fetchMe(token.data);
-                    return Center(child: CircularProgressIndicator(strokeWidth: 2.0));
-                  }
-                  return Column(children: <Widget>[
-                    _renderInfo(context, me.data),
-                    _renderMenus(context),
-                    _renderSignout(context)
-                  ]);
-                },
-              );
-            }
-            return Column(children: <Widget>[
+        body: _token == null ? Column(
+          children: <Widget>[
               _renderAnonymous(context),
               _renderMenus(context)
+          ],
+        ) : StreamBuilder(
+          stream: _bloc.me,
+          builder: (BuildContext context, AsyncSnapshot me) {
+            if (me.hasData == false) {
+              _bloc.fetchMe(_token);
+              return Center(child: CircularProgressIndicator(strokeWidth: 2.0));
+            }
+            return Column(children: <Widget>[
+              _renderInfo(context, me.data),
+              _renderMenus(context),
+              _renderSignout(context)
             ]);
           },
         )

@@ -87,8 +87,8 @@ class _LoginState extends State<LoginScene>{
                             setState(() {
                               _isSubmiting = true;
                             });
-                            _bloc.doLogin(snapshot.data).then((String token) {
-                              _signin(token);
+                            _bloc.doLogin(snapshot.data).then((_auth) {
+                              _signin(_auth);
                               Navigator.of(context).pop();
                             }).catchError((err) {
                               print(err);

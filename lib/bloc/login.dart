@@ -51,16 +51,13 @@ class LoginBloc{
       }
   }
 
-  Future<String> doLogin(Map<String, String> _credential) async{
+  Future<Map<String, String>> doLogin(Map<String, String> _credential) async{
     try {
       final _ret = await http.post(apis['signin'], body: _credential).then((ret) => json.decode(ret.body));
-      if (_ret["success"] == true) {
-        return Future.value(_ret['data']['username']);
-      } else {
-        return Future.error(_ret['message']);
-      }
-    } catch(_) {
-      return Future.error("登陆失败");
+      return _ret.data.cast<String, String>();
+    } catch(err) {
+      print(err);
+      throw("登陆失败");
     }
   }
 
