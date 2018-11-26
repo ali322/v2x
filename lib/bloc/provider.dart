@@ -11,8 +11,9 @@ class Provider extends StatefulWidget{
       return new ProviderState();
     }
 
-    static ProviderState of(BuildContext context) {
-      return (context.inheritFromWidgetOfExactType(_Inherited) as _Inherited).data;
+    static ProviderState of([BuildContext context, bool rebuild = true]) {
+      return rebuild ? (context.inheritFromWidgetOfExactType(_Inherited) as _Inherited).data
+        : (context.ancestorInheritedElementForWidgetOfExactType(_Inherited) as _Inherited).data;
     }
 }
 
