@@ -4,7 +4,7 @@ description: unoffical v2ex application.
 dependencies:
   http: ^0.11.3+16
   rxdart: ^0.18.1
-  cached_network_image: ^0.4.1+1
+  cached_network_image: ^0.5.1
   flutter_markdown: "^0.2.0"
   flutter_secure_storage: ^3.1.2
   flutter:
