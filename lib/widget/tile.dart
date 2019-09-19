@@ -21,9 +21,9 @@ class TopicTile extends StatelessWidget{
             child: ClipRRect(
               borderRadius: BorderRadius.circular(5.0),
               child: CachedNetworkImage(
-                placeholder: Image.asset('asset/default_avatar.png'),
+                placeholder: (BuildContext context, String url) => Image.asset('asset/default_avatar.png'),
                 imageUrl: avatar,
-                errorWidget: Icon(Icons.error),
+                errorWidget: (BuildContext context, String url, Object error) => Icon(Icons.error),
               ),
             ),
           ),
